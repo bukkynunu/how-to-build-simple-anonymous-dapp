@@ -1,27 +1,27 @@
-# How to build a simple anonymous dapp on the celo blockchain
+# How to build a simple anonymous dApp on the Celo blockchain
 
 
 ## Introduction
 Celo is a blockchain platform that focuses on enabling financial access for everyone, regardless of their location or socio-economic background. Its technology is built with mobile-first in mind and provides a fast, secure, and low-cost blockchain infrastructure for developers to build their dApps.
 
-This guide aims to make the process of building a dapp more accessible and less intimidating for those who are new to blockchain development or are looking to explore new technologies by providing developers with a clear and concise overview of the steps required to create an anonymous decentralized application (dapp) on the celo blockchain
+This guide aims to make the process of building a dApp more accessible and less intimidating for those who are new to blockchain development or are looking to explore new technologies by providing developers with a clear and concise overview of the steps required to create an anonymous decentralized application (dApp) on the Celo blockchain
 
 
 ## Prerequisites
-Building this dapp, you would need:
+To Build this dApp, you would need:
 - Solid  understanding of Javascript
-- Basic grasp of solidity
+- Basic grasp of [Solidity](https://soliditylang.org/)
 
 
 ## Requirements
-- VSCode or any other editor
+- [VSCode](https://code.visualstudio.com/) or any other editor
 - A terminal
-- Remix
-- React
-- Celo Extension Wallet
+- [Remix IDE](https://remix.ethereum.org/)
+- [React](https://reactjs.org/)
+- [Celo Extension Wallet](https://docs.celo.org/wallet#celoextensionwallet)
 
 ## Getting Started 😉
-Clone the github repository [here](https://github.com/bukkynunu/tell-secrets) to follow along.
+Clone the GitHub repository [here](https://github.com/bukkynunu/tell-secrets) to follow along.
 This is the structure you should see in your code editor.
 
 ```text
@@ -48,25 +48,25 @@ This is the structure you should see in your code editor.
 └── README.md
 ```
 
-Run `npm install` in your terminal to install all dependencies needed to make the dapp work properly.
+Run `npm install` in your terminal to install all dependencies needed to make the dApp work properly.
 
 ## Smart Contract Development
 To start this segment, we will use Remix, a web-based Integrated Development Environment (IDE) that enables developers to write, test, and deploy smart contracts on the Celo blockchain.
 
 The first step is to create a new workspace and then a new file, which we will name `secrets.sol`. As we begin coding the smart contract, we will include a statement on the first line that specifies the license under which the code is being released.
 
-```js
+```solidity
 // SPDX-License-Identifier: MIT  
 
 pragma solidity >=0.7.0 <0.9.0;
 ```
-The comment specifies the license under which the code is being released. In this case, the license is the MIT License, which is a popular open-source license that allows anyone to use, copy, modify, merge, publish, distribute, sublicense, and/or sell the code with very few restrictions.
+The comment specifies the license under which the code is being released. In this case, the license is the [MIT License](https://opensource.org/license/mit/), which is a popular open-source license that allows anyone to use, copy, modify, merge, publish, distribute, sublicense, and/or sell the code with very few restrictions.
 
 The second line is a "pragma" statement, which is an instruction to the Solidity compiler about how to handle the code. In this case, it tells the compiler to use a version of Solidity that is greater than or equal to 0.7.0, but less than 0.9.0. This ensures that the code will only compile with a compatible version of Solidity, which helps to prevent any potential compatibility issues.
 
-Next up, provide an interface for a contract that conforms to the ERC20 token standard, which is a widely used standard for implementing tokens on the Ethereum blockchain.
+Next up, provide an interface for a contract that conforms to the [ERC20 token standard](https://ethereum.org/en/developers/docs/standards/tokens/erc-20/), which is a widely used standard for implementing tokens on the Ethereum blockchain.
 
-```js
+```solidity
 interface IERC20Token {
   function transfer(address, uint256) external returns (bool);
   function approve(address, uint256) external returns (bool);
@@ -88,11 +88,11 @@ The interface includes six function declarations, which are used to interact wit
 `totalSupply`: Returns the total number of tokens in circulation.
 `balanceOf`: Returns the token balance of a specified address.
 `allowance`: Returns the amount of tokens that an owner has allowed a spender to transfer.
-The interface also includes two events, `Transfer` and `Approval`, which are emitted when a transfer or an approval occurs, respectively. These events can be used by external applications to track the movement of tokens within the token contract.
+The interface also includes two events, `Transfer` and `Approval`, which are emitted when a transfer or approval occurs, respectively. These events can be used by external applications to track the movement of tokens within the token contract.
 
 Next, we create a contract named `Secrets` that includes a struct named `Secret`.
 
-```js
+```solidity
 contract Secrets{
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
 
@@ -118,9 +118,9 @@ In addition, the contract includes a variable named `cUsdTokenAddress` that is m
 
 It is worth noting that this code snippet only defines the structure of the Secrets contract, and does not include any functions or methods for interacting with it.
 
-Next up, we declare two variables, `secrets` and `secretLength`, and defines the former as an internal mapping from unsigned integers to a custom data type called `Secret`.
+Next, up, we declare two variables, `secrets` and `secretLength`, and define the former as an internal mapping from unsigned integers to a custom data type called `Secret`.
 
-```js
+```solidity
 mapping(uint => Secret) internal secrets;
 uint secretLength = 0;
 ```
@@ -131,7 +131,7 @@ The second line initializes the `secretLength` variable to zero. This variable c
 
 Next, you create a function to add your secrets.
 
-```js
+```solidity
     function addSecret(
         string memory _text
     )public{
@@ -152,7 +152,7 @@ The secretLength variable is then incremented, which means the next call to addS
 
 Up next, you would create a function that would gift that secret to another address. Which basically means it would transfer the ownership of that secret to another address.
 
-```js
+```solidity
    function giftOwner(
         uint amount,
         uint _index
@@ -173,7 +173,7 @@ The purpose of the function is to transfer a specified amount of cUSD from the p
 
 Following this, you would then create the like and dislike function. This would allow people to express their approval or disapproval of secrets by sending a small amount of cUSD to the owner of the secret.
 
-```js
+```solidity
  function likeSecret(uint _index) public {
         require(
         IERC20Token(cUsdTokenAddress).transferFrom(
@@ -197,13 +197,13 @@ Following this, you would then create the like and dislike function. This would 
         secrets[_index].dislikes++;
     }
 ```
-The `likeSecret` function takes an input parameter called `_index`, which is used to identify a secret stored in an array called secrets. The function first checks that the person calling the function has approved the transfer of a certain amount of 1cUSD to be sent from their wallet to the owner of the secret. If the transfer is approved, the function will increase the number of likes associated with the secret.
+The `likeSecret` function takes an input parameter called `_index`, which is used to identify a secret stored in an array called secrets. The function first checks that the person calling the function has approved the transfer of a certain amount of cUSD to be sent from their wallet to the owner of the secret. If the transfer is approved, the function will increase the number of likes associated with the secret.
 
 The `dislikeSecret` function is similar to `likeSecret`, but instead of increasing the number of likes, it increases the number of dislikes for a particular secret. It also checks that the person calling the function has approved the transfer of the same amount of cUSD to the owner of the secret.
 
 Finally, you would create the `getSecrets` function and the `getSecretsLength` to view the details of a specific secret stored and also get the total number of secrets currently stored in the contract.
 
-```js
+```solidity
     function getSecret(uint _index) public view returns(
         address payable,
         string memory,
@@ -224,7 +224,7 @@ function getSecretLength() public view returns (uint) {
     }
 ```
 
-The `getSecret` function  takes an input parameter called `_index` which is an integer value. It returns four values as output - an address, a string, and two integers.
+The `getSecret` function takes an input parameter called `_index` which is an integer value. It returns four values as output - an address, a string, and two integers.
 
 The function finds the secret stored in the `secrets` variable at the index specified by the `_index` parameter. It then returns the values of four properties of the secret, which are the owner's address, the text of the secret, and the number of likes and dislikes the secret has received.
 
@@ -237,7 +237,7 @@ After installing and configuring your wallet, you must proceed to fund it using 
 
 Next, you will need to access Remix, a smart contract development environment, and download and activate the Celo plugin from the plugin manager. Once activated, you must connect your Celo wallet to Remix and deploy your contract to the Celo blockchain.
 
-## Developing the Frontend
+## Developing the front end
 Well done so far. For the final section, we would be integrating our contract into a full stack dapp using react.
 
 From the cloned repository, download all necessary files and folders from the public folder
@@ -263,10 +263,10 @@ const contractAddress = "0xC92Fe8ED9eE9e9f2b789911428fe0B088602b165";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 ```
 
-The first line imports the CSS styles from a file named `App.css`. This file  contains custom styles for the application.
-Next, you would import `useState`, `useEffect` and `useCallback` functions from the react library.
-We would then import `web3` a JavaScript library that provides a way to interact with Ethereum and Celo blockchains.
-Next up on our import  list is `newKitFromWeb3`  a function from the `@celo/contractkit` library that creates a ContractKit instance used to interact with smart contracts on the Celo blockchain.
+The first line imports the CSS styles from a file named `App.css`. This file contains custom styles for the application.
+Next, you would import the `useState`, `useEffect`, and `useCallback` hooks from the React library.
+We would then import `web3` a JavaScript library that provides a way to interact with the Ethereum and Celo blockchains.
+Next up on our import list is `newKitFromWeb3`  a function from the `@celo/contractkit` library that creates a ContractKit instance used to interact with smart contracts on the Celo blockchain.
 The following line sets a constant `ERC20_DECIMALS` to a value of 18. This value represents the number of decimal places used by most ERC20 tokens, which is the standard for tokens on Ethereum and Celo blockchains.
 
 Moving forward, you would define the `App` component. It defines several state variables using the `useState` hook, including `contract`, `address`, `kit`, `cUSDBalance`, `secrets`, `text`, and `amount`.
@@ -346,13 +346,13 @@ function App() {
 
 You would also create a function called `connectToWallet` that uses the Celo wallet to connect to the user's account and sets the `address` and `kit` state variables.
 
-The `getBalance` function uses the `kit` and `address` variables to retrieve the user's balance in cUSD (Celo's stablecoin) and sets the "contract" and `cUSDBalance` state variables.
+The `getBalance` function uses the `kit` and `address` variables to retrieve the user's balance in cUSD (Celo's USD stablecoin) and sets the "contract" and `cUSDBalance` state variables.
 
-The `getSecrets` function uses the `contract` variable to retrieve a list of secrets and their associated metadata from the smart contract, and sets the "secrets" state variable.
+The `getSecrets` function uses the `contract` variable to retrieve a list of secrets and their associated metadata from the smart contract and sets the "secrets" state variable.
 
 The `useCallback` hook is used to memorize these functions so that they don't get recreated on every render, improving performance.
 
-Up next, you would create functions for adding, gifting, liking and disliking a secret.
+Up next, you would create functions for adding, gifting, liking, and disliking a secret.
 
 ```js
   const submitForm = async (e) => {
@@ -442,7 +442,7 @@ The second function, `giftAmount`, is triggered when a user gifts cUSD to a secr
 
 The third function, `likeSecret`, is triggered when a user likes a secret. It approves the smart contract to spend 1 cUSD on the user's behalf, and then calls the `likeSecret` function on the smart contract, passing in the index of the secret. It updates the list of secrets and the user's cUSD balance by calling the `getSecrets` and `getBalance` functions.
 
-The fourth function, `dislikeSecret`, is triggered when a user dislikes a secret. It works similarly to the `likeSecret` function, but instead calls the `dislikeSecret` function on the smart contract.
+The fourth function, `dislikeSecret`, is triggered when a user dislikes a secret. It works similarly to the `likeSecret` function but instead calls the `dislikeSecret` function on the smart contract.
 
 After this, you would use the `useEffect` hook to some specific functions as the application starts.
 
@@ -469,7 +469,7 @@ The second `useEffect` hook is used to get the account balance if the wallet is 
 The third `useEffect` hook is used to get some secrets from a contract if the contract is available.
 
 
-The next phase of the code is basically the html section and is fairly understandable. So just copy the code as is.
+The next phase of the code is the HTML section and is fairly understandable. So just copy the code as is.
 
 ```js
  return (
@@ -555,7 +555,7 @@ export default App;
 
 ## Conclusion
 
-Well done on successfully creating a full-stack dapp using Solidity and React on the Celo smart contract! Congratulations on your achievement! 🎉
+Well done on successfully creating a full-stack dApp using Solidity and React! Congratulations on your achievement! 🎉
 
 
 
