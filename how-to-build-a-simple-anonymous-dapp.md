@@ -14,11 +14,11 @@ Building this dapp, you would need:
 
 
 ## Requirements
-- VSCode or any other editor
+- [VSCode](https://code.visualstudio.com/) or any other editor
 - A terminal
-- Remix
-- React
-- Celo Extension Wallet
+- [Remix](https://remix.ethereum.org/)
+- [React](https://reactjs.org/)
+- [Celo Extension Wallet](https://docs.celo.org/wallet)
 
 ## Getting Started 😉
 Clone the github repository [here](https://github.com/bukkynunu/tell-secrets) to follow along.
@@ -55,7 +55,7 @@ To start this segment, we will use Remix, a web-based Integrated Development Env
 
 The first step is to create a new workspace and then a new file, which we will name `secrets.sol`. As we begin coding the smart contract, we will include a statement on the first line that specifies the license under which the code is being released.
 
-```js
+```solidity
 // SPDX-License-Identifier: MIT  
 
 pragma solidity >=0.7.0 <0.9.0;
@@ -66,7 +66,7 @@ The second line is a "pragma" statement, which is an instruction to the Solidity
 
 Next up, provide an interface for a contract that conforms to the ERC20 token standard, which is a widely used standard for implementing tokens on the Ethereum blockchain.
 
-```js
+```solidity
 interface IERC20Token {
   function transfer(address, uint256) external returns (bool);
   function approve(address, uint256) external returns (bool);
@@ -82,17 +82,17 @@ interface IERC20Token {
 
 The interface includes six function declarations, which are used to interact with the token contract:
 
-`transfer`: Sends tokens from the caller's address to the specified address.
-`approve`: Allows the specified address to spend a certain amount of tokens from the caller's address.
-`transferFrom`: Transfers tokens from one address to another, as allowed by an approved spender.
-`totalSupply`: Returns the total number of tokens in circulation.
-`balanceOf`: Returns the token balance of a specified address.
-`allowance`: Returns the amount of tokens that an owner has allowed a spender to transfer.
-The interface also includes two events, `Transfer` and `Approval`, which are emitted when a transfer or an approval occurs, respectively. These events can be used by external applications to track the movement of tokens within the token contract.
+1. `transfer`: Sends tokens from the caller's address to the specified address.
+2. `approve`: Allows the specified address to spend a certain amount of tokens from the caller's address.
+3. `transferFrom`: Transfers tokens from one address to another, as allowed by an approved spender.
+4. `totalSupply`: Returns the total number of tokens in circulation.
+5. `balanceOf`: Returns the token balance of a specified address.
+6. `allowance`: Returns the number of tokens that an owner has allowed a spender to transfer.
+The interface also includes two events, `Transfer` and `Approval`, which are emitted when a transfer or approval occurs, respectively. These events can be used by external applications to track the movement of tokens within the token contract.
 
 Next, we create a contract named `Secrets` that includes a struct named `Secret`.
 
-```js
+```solidity
 contract Secrets{
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
 
@@ -106,21 +106,21 @@ contract Secrets{
 
 The `Secret` struct has four fields:
 
-`owner` - an address type variable that is marked as `payable`. This suggests that it is intended to hold an Ethereum address that is capable of receiving Ether payments.
+1. `owner` - an address type variable that is marked as `payable`. This suggests that it is intended to hold an Ethereum address that is capable of receiving Ether payments.
 
-`secretText` - a string variable that will hold the text of the secret.
+2. `secretText` - a string variable that will hold the text of the secret.
 
-`likes` - an unsigned integer variable that will store the number of likes received by the secret.
+3. `likes` - an unsigned integer variable that will store the number of likes received by the secret.
 
-`dislikes` - an unsigned integer variable that will store the number of dislikes received by the secret.
+4. `dislikes` - an unsigned integer variable that will store the number of dislikes received by the secret.
 
 In addition, the contract includes a variable named `cUsdTokenAddress` that is marked as `internal`. This suggests that it is intended to be used within the contract but not outside of it. The variable is assigned a specific Ethereum address, which is likely the address of a specific smart contract that the Secrets contract will interact with.
 
 It is worth noting that this code snippet only defines the structure of the Secrets contract, and does not include any functions or methods for interacting with it.
 
-Next up, we declare two variables, `secrets` and `secretLength`, and defines the former as an internal mapping from unsigned integers to a custom data type called `Secret`.
+Next up, we declare two variables, `secrets` and `secretLength`, and define the former as an internal mapping from unsigned integers to a custom data type called `Secret`.
 
-```js
+```solidity
 mapping(uint => Secret) internal secrets;
 uint secretLength = 0;
 ```
@@ -131,7 +131,7 @@ The second line initializes the `secretLength` variable to zero. This variable c
 
 Next, you create a function to add your secrets.
 
-```js
+```solidity
     function addSecret(
         string memory _text
     )public{
@@ -152,7 +152,7 @@ The secretLength variable is then incremented, which means the next call to addS
 
 Up next, you would create a function that would gift that secret to another address. Which basically means it would transfer the ownership of that secret to another address.
 
-```js
+```solidity
    function giftOwner(
         uint amount,
         uint _index
@@ -173,7 +173,7 @@ The purpose of the function is to transfer a specified amount of cUSD from the p
 
 Following this, you would then create the like and dislike function. This would allow people to express their approval or disapproval of secrets by sending a small amount of cUSD to the owner of the secret.
 
-```js
+```solidity
  function likeSecret(uint _index) public {
         require(
         IERC20Token(cUsdTokenAddress).transferFrom(
@@ -203,7 +203,7 @@ The `dislikeSecret` function is similar to `likeSecret`, but instead of increasi
 
 Finally, you would create the `getSecrets` function and the `getSecretsLength` to view the details of a specific secret stored and also get the total number of secrets currently stored in the contract.
 
-```js
+```solidity
     function getSecret(uint _index) public view returns(
         address payable,
         string memory,
@@ -264,7 +264,7 @@ const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 ```
 
 The first line imports the CSS styles from a file named `App.css`. This file  contains custom styles for the application.
-Next, you would import `useState`, `useEffect` and `useCallback` functions from the react library.
+Next, you would import `useState`, `useEffect`, and `useCallback` functions from the react library.
 We would then import `web3` a JavaScript library that provides a way to interact with Ethereum and Celo blockchains.
 Next up on our import  list is `newKitFromWeb3`  a function from the `@celo/contractkit` library that creates a ContractKit instance used to interact with smart contracts on the Celo blockchain.
 The following line sets a constant `ERC20_DECIMALS` to a value of 18. This value represents the number of decimal places used by most ERC20 tokens, which is the standard for tokens on Ethereum and Celo blockchains.
@@ -348,7 +348,7 @@ You would also create a function called `connectToWallet` that uses the Celo wal
 
 The `getBalance` function uses the `kit` and `address` variables to retrieve the user's balance in cUSD (Celo's stablecoin) and sets the "contract" and `cUSDBalance` state variables.
 
-The `getSecrets` function uses the `contract` variable to retrieve a list of secrets and their associated metadata from the smart contract, and sets the "secrets" state variable.
+The `getSecrets` function uses the `contract` variable to retrieve a list of secrets and their associated metadata from the smart contract and sets the `secrets` state variable.
 
 The `useCallback` hook is used to memorize these functions so that they don't get recreated on every render, improving performance.
 
