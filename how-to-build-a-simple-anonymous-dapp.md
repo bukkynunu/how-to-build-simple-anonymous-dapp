@@ -118,7 +118,7 @@ In addition, the contract includes a variable named `cUsdTokenAddress` that is m
 
 It is worth noting that this code snippet only defines the structure of the Secrets contract, and does not include any functions or methods for interacting with it.
 
-Next, up, we declare two variables, `secrets` and `secretLength`, and define the former as an internal mapping from unsigned integers to a custom data type called `Secret`.
+Next up, we declare two variables, `secrets` and `secretLength`, and define the former as an internal mapping from unsigned integers to a custom data type called `Secret`.
 
 ```solidity
 mapping(uint => Secret) internal secrets;
